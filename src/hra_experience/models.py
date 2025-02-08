@@ -7,7 +7,7 @@ class Experience(models.Model):
     billing_type = models.CharField(max_length=50)
     billing_rate = models.DecimalField(max_digits=10, decimal_places=2)
     skills = models.TextField()
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('hra_users.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.customer_name

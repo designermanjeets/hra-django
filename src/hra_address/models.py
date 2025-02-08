@@ -17,7 +17,7 @@ class Address(models.Model):
     permanent_zip_code = models.CharField(max_length=10)
     
     tenant = models.ForeignKey("hra_tenants.Tenant", on_delete=models.CASCADE, related_name='addresses')
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("hra_users.User", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.street
