@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "hra_tenants.apps.HraTenantsConfig",
     "hra_bank_details.apps.HraBankDetailsConfig",
     "hra_users.apps.HraUsersConfig",
+    "hra_reporting_manager.apps.HraReportingManagerConfig",
     "pages.apps.PagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
