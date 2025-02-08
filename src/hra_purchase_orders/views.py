@@ -22,7 +22,7 @@ class PurchaseOrderList(APIView):
     def post(self, request):
         serializer = PurchaseOrderSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(tenant_id=request.user.tenant_id)
+            serializer.save(tenant_id=request.user.tenant_id, assigned_to=request.data.get('assigned_to'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -42,7 +42,7 @@ class PurchaseOrderDetail(APIView):
         purchase_order = self.get_object(pk)
         serializer = PurchaseOrderSerializer(purchase_order, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(assigned_to=request.data.get('assigned_to'))
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
