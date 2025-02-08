@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "hra_experience.apps.HraExperienceConfig",
     "hra_customers.apps.HraCustomersConfig",
     "hra_purchase_orders.apps.HraPurchaseOrdersConfig",
+    "hra_invoices.apps.HraInvoicesConfig",
     "pages.apps.PagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
