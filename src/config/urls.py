@@ -37,6 +37,7 @@ urlpatterns = [
     path("invoices/", include("hra_invoices.urls")),
     path("timesheets/", include("hra_timesheets.urls")),
     path("global_configs/", include("hra_global_configs.urls")),
+    path("lookup/", include("hra_lookup.urls")),
     # re_path(r'^docs/', include('rest_framework_docs.urls')), // https://www.drfdocs.com/installation/
 ]
 if not settings.TESTING:

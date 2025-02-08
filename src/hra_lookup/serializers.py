@@ -1,12 +1,7 @@
 from rest_framework import serializers
-from .models import Invoice, InvoiceItem
+from .models import Lookup
 
-class InvoiceSerializer(serializers.ModelSerializer):
+class LookupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Invoice
-        fields = '__all__'
-        
-class InvoiceItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = InvoiceItem
+        model = Lookup
         fields = '__all__'

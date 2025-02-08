@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "hra_invoices.apps.HraInvoicesConfig",
     "hra_timesheets.apps.HraTimesheetsConfig",
     "hra_global_configs.apps.HraGlobalConfigsConfig",
+    "hra_lookup.apps.HraLookupConfig",
     "pages.apps.PagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
