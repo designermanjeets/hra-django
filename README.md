@@ -10,7 +10,7 @@ For the Docker setup, everything included follows [Docker best practices](https:
 
 **This app uses Django 5.1.2 and Python 3.13.0**.
 
-[![Screenshot](.github/docs/screenshot.jpg)](https://github.com/yourusername/hrk-django-app/blob/main/.github/docs/screenshot.jpg?raw=true)
+[![Screenshot](https://raw.githubusercontent.com/designermanjeets/hra-django/refs/heads/main/assets/static/images/HRK.png)
 
 ## Table of contents
 
