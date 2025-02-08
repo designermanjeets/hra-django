@@ -18,15 +18,20 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include
-from django.urls import path
+from django.urls import path, re_path
 
 urlpatterns = [
     path("up/", include("up.urls")),
     path("", include("pages.urls")),
+    path("hra_auth/", include("hra_auth.urls")),
+    path("hra_tenants/", include("hra_tenants.urls")),
     path("admin/", admin.site.urls),
+    path("hra_address/", include("hra_address.urls")),
+    path("hra_bank_details/", include("hra_bank_details.urls")),
+    # re_path(r'^docs/', include('rest_framework_docs.urls')), // https://www.drfdocs.com/installation/
 ]
 if not settings.TESTING:
     urlpatterns = [
         *urlpatterns,
-        path("__debug__/", include("debug_toolbar.urls")),
+        path("__debug__/", include("debug_toolbar.urls"))
     ]

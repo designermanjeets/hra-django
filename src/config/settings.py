@@ -19,7 +19,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = 'SECRET_KEY' #os.environ["SECRET_KEY"]
 
 DEBUG = bool(strtobool(os.getenv("DEBUG", "false")))
 
@@ -31,6 +31,10 @@ ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
 
 # Application definitions
 INSTALLED_APPS = [
+    "hra_address.apps.HraAddressConfig",
+    "hra_tenants.apps.HraTenantsConfig",
+    "hra_bank_details.apps.HraBankDetailsConfig",
+    "hra_users.apps.HraUsersConfig",
     "pages.apps.PagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -38,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework"
+
 ]
 
 MIDDLEWARE = [

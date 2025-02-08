@@ -141,8 +141,8 @@ these commands for PowerShell if you want.
 #### Clone this repo anywhere you want and move into the directory:
 
 ```sh
-git clone https://github.com/nickjj/docker-django-example hellodjango
-cd hellodjango
+git clone https://github.com/nickjj/docker-django-example hradjango
+cd hradjango
 
 # Optionally checkout a specific tag, such as: git checkout 0.11.0
 ```
