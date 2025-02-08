@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "hra_reporting_manager.apps.HraReportingManagerConfig",
     "hra_education.apps.HraEducationConfig",
     "hra_experience.apps.HraExperienceConfig",
+    "hra_customers.apps.HraCustomersConfig",
     "pages.apps.PagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",

@@ -31,6 +31,7 @@ urlpatterns = [
     path("hra_reporting_manager/", include("hra_reporting_manager.urls")),
     path("hra_education/", include("hra_education.urls")),
     path("hra_experience/", include("hra_experience.urls")),
+    path("hra_customers/", include("hra_customers.urls")),
     # re_path(r'^docs/', include('rest_framework_docs.urls')), // https://www.drfdocs.com/installation/
 ]
 if not settings.TESTING:
