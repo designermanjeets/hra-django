@@ -20,6 +20,21 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path, re_path
 
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Your API Title",
+      default_version="v1",
+      description="Your API description",
+      terms_of_service="https://example.com/terms/",
+      contact=openapi.Contact(email="contact@example.com"),
+      license=openapi.License(name="MIT License"),
+   ),
+   public=True,
+)
+
 urlpatterns = [
     # path("up/", include("up.urls")),
     path("", include("pages.urls")),
@@ -38,7 +53,8 @@ urlpatterns = [
     path("timesheets/", include("hra_timesheets.urls")),
     path("global_configs/", include("hra_global_configs.urls")),
     path("lookup/", include("hra_lookup.urls")),
-    # re_path(r'^docs/', include('rest_framework_docs.urls')), // https://www.drfdocs.com/installation/
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 if not settings.TESTING:
     urlpatterns = [

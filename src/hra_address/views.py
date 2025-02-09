@@ -9,6 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsTenantUser
 from rest_framework.renderers import JSONRenderer
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 # Create your views here.
 class AddressList(APIView):
     permission_classes = [IsAuthenticated, IsTenantUser]
@@ -19,6 +22,15 @@ class AddressList(APIView):
         serializer = AddressSerializer(addresses, many=True)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        request_body=AddressSerializer,
+        operation_description="Create a new address",
+        responses={
+            201: 'Created',
+            400: 'Bad Request',
+        }
+
+    )
     def post(self, request):
         serializer = AddressSerializer(data=request.data)
         if serializer.is_valid():

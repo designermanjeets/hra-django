@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 import jwt
 from datetime import datetime, timedelta
+from rest_framework import serializers
 
 SECRET_KEY = 'hrkinfotech'
 TOKEN_EXPIRATION_TIME = 30  # Token expiration time in minutes
