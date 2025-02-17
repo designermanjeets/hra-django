@@ -23,15 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'SECRET_KEY' #os.environ["SECRET_KEY"]
 
-DEBUG = bool(strtobool(os.getenv("DEBUG", "false")))
+# DEBUG = bool(strtobool(os.getenv("DEBUG", "false")))
+DEBUG = True
 
 TESTING = "test" in sys.argv
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#std:setting-ALLOWED_HOSTS
-allowed_hosts = os.getenv("ALLOWED_HOSTS", ".localhost,127.0.0.1,[::1]")
-ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
-
+# allowed_hosts = os.getenv("ALLOWED_HOSTS", ".localhost,127.0.0.1,[::1]")
+# ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
+allowed_hosts = ['*']
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True  # For development only
+CORS_ALLOW_CREDENTIALS = True
 # Application definitions
+# CORS_ALLOWED_ORIGINS = ["*"]
 INSTALLED_APPS = [
     "hra_address.apps.HraAddressConfig",
     "hra_tenants.apps.HraTenantsConfig",
@@ -55,7 +60,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
-    "drf_yasg"
+    "drf_yasg",
+    "corsheaders"
 ]
 
 REST_FRAMEWORK = {
@@ -66,6 +72,8 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -115,14 +123,21 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "hello"),
-        "USER": os.getenv("POSTGRES_USER", "hello"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"),
-        "HOST": os.getenv("POSTGRES_HOST", "postgres"),
-        "PORT": os.getenv("POSTGRES_PORT", "5432"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB", "hello"),
+#         "USER": os.getenv("POSTGRES_USER", "hello"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"),
+#         "HOST": os.getenv("POSTGRES_HOST", "postgres"),
+#         "PORT": os.getenv("POSTGRES_PORT", "5432"),
+#     }
+# }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

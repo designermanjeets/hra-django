@@ -1,3 +1,39 @@
-from django.test import TestCase
+fromdjango.testimportTestCase
 
-# Create your tests here.
+#Createyourtestshere.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

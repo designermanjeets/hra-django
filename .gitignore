@@ -7,7 +7,7 @@ public/*
 !public/.keep
 public_collected/*
 !public_collected/.keep
-
+venv
 .env*
 !.env.example
 docker-compose.override.yml
