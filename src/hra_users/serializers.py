@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import User
-
+from .models import *
+from django.contrib.auth.models import Permission
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -29,3 +29,42 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+
+class EmpDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmpDetail
+        fields = '__all__'
+
+class AddressDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddressDetail
+        fields = '__all__'
+
+class PersonalDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalDetail
+        fields = '__all__'
+
+class VisadetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visadetail
+        fields = '__all__'
+
+
+class EducationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Education
+        fields = '__all__'
+
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = '__all__'
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'

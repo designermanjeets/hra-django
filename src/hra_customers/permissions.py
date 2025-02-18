@@ -8,4 +8,4 @@ class IsTenantUser(permissions.BasePermission):
     def has_permission(self, request, view):
         # Implement your custom permission logic here
         # For example, check if the user is part of the tenant
-        return request.user and request.user.is_authenticated and request.user.tenant is not None
+        return request.user and request.user.is_authenticated and request.user.tenant_id is not None

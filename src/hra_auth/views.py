@@ -19,7 +19,7 @@ from email.mime.multipart import MIMEMultipart
 import jwt
 import datetime
 from jwt import ExpiredSignatureError, InvalidTokenError
-
+from rest_framework_simplejwt.tokens import RefreshToken
 # SECRET_KEY = "your_secret_key"
 # logger = logging.getLogger(__name__)
 
@@ -48,11 +48,13 @@ class LoginView(APIView):
         # logger.info()
         
         if user is not None:
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
             
-            access_token = generate_access_token(user)
-            refresh_token = generate_refresh_token(user)
+            # access_token = generate_access_token(user)
+            # refresh_token = generate_refresh_token(user)
 
-            return  Response({'message': 'Login successful',"status":True,"access_token":access_token,"refresh_token":refresh_token},status=status.HTTP_200_OK)
+            return  Response({'message': 'Login successful',"status":True,"access_token":access_token,"refresh_token":str(refresh),"role":user.job_role},status=status.HTTP_200_OK)
             
         else:
             return Response({'error': 'Invalid credentials',"status":False}, status=status.HTTP_401_UNAUTHORIZED)

@@ -16,6 +16,7 @@ import sys
 from distutils.util import strtobool
 from pathlib import Path
 import rest_framework_simplejwt
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
@@ -59,9 +60,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework_simplejwt",
+    # "rest_framework_simplejwt",
     "drf_yasg",
-    "corsheaders"
+    "corsheaders",
+    "hra_auth"
 ]
 
 REST_FRAMEWORK = {
@@ -69,6 +71,15 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,  # This may be causing invalid tokens
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'TOKEN_BLACKLIST': True,
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -121,12 +132,19 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+
+
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
+
 
 # DATABASES = {
 #     "default": {

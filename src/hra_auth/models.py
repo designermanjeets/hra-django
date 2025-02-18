@@ -30,7 +30,7 @@ class User(AbstractBaseUser):
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('inactive', 'Inactive'),
-    ]
+    ] 
     
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -42,8 +42,7 @@ class User(AbstractBaseUser):
     subscription = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    tenant_id = models.CharField(max_length=100)
-
+    tenant_id = models.ForeignKey('hra_tenants.Tenant', on_delete=models.CASCADE,default=1)
     objects = UserManager()
 
     # USERNAME_FIELD = 'email'
