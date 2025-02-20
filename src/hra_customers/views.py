@@ -12,6 +12,8 @@ from .serializers import CustomerSerializer
 from hra_address.models import Address
 from rest_framework_simplejwt.tokens import AccessToken
 from hra_address.serializers import AddressSerializer
+from django.contrib.auth.models import Permission
+from hra_users.models import UserProfile
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -19,14 +21,12 @@ User = get_user_model()
 
 
 def check_user(auth_header):
-    
     if auth_header and auth_header.startswith("Bearer "):
         token_str = auth_header.split(" ")[1] 
         try:
             token = AccessToken(token_str)
             user_id = token["user_id"]  
             user_id = User.objects.get(id  = user_id)
-            
         except Exception as e:
             return Response({"error": f"Invalid token: {str(e)}"}, status=status.HTTP_401_UNAUTHORIZED)
     else:
@@ -35,18 +35,17 @@ def check_user(auth_header):
 
 
 
-
-
-
 class CustomerList(APIView):
-    # permission_classes = [IsAuthenticated]
     permission_classes = [IsAuthenticated, IsTenantUser]
     renderer_classes = [JSONRenderer]
     def get(self, request,pk=None):
         auth_header = request.headers.get('Authorization', None)
         user_id = check_user(auth_header)
-        
-        
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('view_empdetail'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
         customers = Customer.objects.filter(tenant_id=user_id.tenant_id.id)
         serializer = CustomerSerializer(customers, many=True)
         return Response(serializer.data)
@@ -57,22 +56,20 @@ class AddCustomer(APIView):
     permission_classes = [IsAuthenticated, IsTenantUser]
     renderer_classes = [JSONRenderer]
     def post(self,request):
-        print("post request")
         auth_header = request.headers.get('Authorization', None)
         user_id = check_user(auth_header)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('view_empdetail'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
         billing_address_data = request.data.get("billing_address")
-        
         shipping_address_data = request.data.get("shipping_address")
-        print(billing_address_data)
-        
-        
         billing_address_serializer = AddressSerializer(data=billing_address_data)
         if billing_address_serializer.is_valid():
             billing_address = billing_address_serializer.save()
         else:
             return Response(billing_address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        print("biiling Saved successfully")
-
         shipping_address_serializer = AddressSerializer(data=shipping_address_data)
         if shipping_address_serializer.is_valid():
             shipping_address = shipping_address_serializer.save()

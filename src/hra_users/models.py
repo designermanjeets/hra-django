@@ -35,6 +35,8 @@ class User(AbstractUser):
 class Role(models.Model):
     name = models.CharField(max_length=100, unique=True)
     permissions = models.ManyToManyField(Permission, blank=True)
+    status = models.CharField(max_length=10,default='1')
+    comment = models.TextField(default='')
     def __str__(self):
         return self.name
 
@@ -54,7 +56,7 @@ class UserProfile(models.Model):
 
 class EmpDetail(models.Model):
     user = models.ForeignKey("hra_users.User", on_delete=models.CASCADE,db_column='user_id',related_name='%(class)s_user_id')
-    job_role  = models.CharField(max_length=20)
+    emp_code = models.CharField(max_length=20,unique=True,default="EMP001")
     joining_date = models.DateTimeField()
     dob = models.CharField(max_length=20)
     reporting_manager = models.ForeignKey("hra_users.User", on_delete=models.CASCADE,db_column='reporting_manager',related_name='%(class)s_reporting_manager')
