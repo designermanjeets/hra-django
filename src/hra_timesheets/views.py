@@ -9,7 +9,10 @@ from django.shortcuts import get_object_or_404
 from hra_bank_details.permissions import IsTenantUser
 from .models import Timesheet
 from .serializers import TimesheetSerializer
-
+from hra_users.serializers import UserProfileSerializer
+from hra_users.models import UserProfile
+from hra_customers.views import check_user
+ 
 class TimesheetList(APIView):
     permission_classes = [IsAuthenticated, IsTenantUser]
     renderer_classes = [JSONRenderer]
@@ -50,3 +53,40 @@ class TimesheetDetail(APIView):
         timesheet = self.get_object(pk)
         timesheet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AllTimesheetList(APIView):
+    permission_classes = [IsAuthenticated, IsTenantUser]
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request):
+        auth_header = request.headers.get('Authorization', None)
+        user_id = check_user(auth_header)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('view_timesheet'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        timesheets = Timesheet.objects.filter(tenant_id=user_id.tenant_id.id)
+        serializer = TimesheetSerializer(timesheets, many=True)
+        return Response(serializer.data)
+    
+
+class AddTimeSheet(APIView):
+    permission_classes = [IsAuthenticated, IsTenantUser]
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request):
+        auth_header = request.headers.get('Authorization', None)
+        user_id = check_user(auth_header)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('add_timesheet'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        data = request.data
+
+        serial = TimesheetSerializer(data = data)
+        if serial.is_valid():
+            serial.save()
+            return Response({"status":True,"message":"Time Sheet added successfully"})

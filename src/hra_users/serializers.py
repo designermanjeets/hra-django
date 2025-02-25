@@ -80,3 +80,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
+
+
+class ActivityLogsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityLogs
+        fields = '__all__'
+
+
+class JobRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobRole
+        fields = '__all__'
+
+

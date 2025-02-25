@@ -51,6 +51,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role.name if self.role else 'No Role'}"
+    
+
+
+
+
 
 
 
@@ -61,6 +66,7 @@ class EmpDetail(models.Model):
     dob = models.CharField(max_length=20)
     reporting_manager = models.ForeignKey("hra_users.User", on_delete=models.CASCADE,db_column='reporting_manager',related_name='%(class)s_reporting_manager')
     status = models.CharField(max_length=20,default ='1')
+
     class Meta:
         db_table = 'emp_detail'
     
@@ -138,6 +144,29 @@ class Experience(models.Model):
     status = models.CharField(max_length=10,default='1')
     class Meta:
         db_table = "experience_model"
+
+
+class ActivityLogs(models.Model):
+    user = models.ForeignKey("hra_users.User", on_delete=models.CASCADE,db_column='user_id',related_name='%(class)s_user_id')
+    name = models.CharField(max_length=200)
+    status = models.CharField(max_length=20,default = '1')
+    table = models.CharField(max_length=200,default='1')
+    action = models.CharField(max_length=200)
+    time = models.DateTimeField(auto_now_add=True)
+    message = models.TextField()
+
+    class Meta:
+        db_table = "activity_logs"
+
+
+
+
+class JobRole(models.Model):
+    name = models.CharField(max_length=100)
+    comment = models.TextField()
+    status = models.CharField(max_length=10,default='1')
+    class Meta:
+        db_table = "job_role"
 
 
 

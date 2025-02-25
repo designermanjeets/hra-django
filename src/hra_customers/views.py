@@ -16,7 +16,18 @@ from django.contrib.auth.models import Permission
 from hra_users.models import UserProfile
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from hra_users.serializers import ActivityLogsSerializer
 
+
+
+def store_activity(data):
+
+    serial = ActivityLogsSerializer(data=data)
+    if serial.is_valid():
+        serial.save()
+        return True
+    else:
+        return serial.errors
 
 
 
@@ -48,10 +59,15 @@ class CustomerList(APIView):
             return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
         customers = Customer.objects.filter(tenant_id=user_id.tenant_id.id)
         serializer = CustomerSerializer(customers, many=True)
+        activity_logs={
+            "user":user_id.id,"name":"Get all Customers","status":"1","table":"Customers","action":"Get Request","message":"get all customers"
+                       }
+        activity = store_activity(activity_logs)
         return Response(serializer.data)
 
     
     
+
 class AddCustomer(APIView):
     permission_classes = [IsAuthenticated, IsTenantUser]
     renderer_classes = [JSONRenderer]
@@ -81,7 +97,13 @@ class AddCustomer(APIView):
         serializer = CustomerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            activity_logs={
+            "user":user_id.id,"name":"add customers","status":"1","table":"Customers","action":"Posst Request","message":f"Customer Added {request.data.get("customer_name")}"
+                       }
+            activity = store_activity(activity_logs)
+            print(activity)
             return Response({"data":serializer.data,"status":True,"message":"success"}, status=status.HTTP_201_CREATED)
+        
         return Response({"status":False,"message":"Failed","error":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 

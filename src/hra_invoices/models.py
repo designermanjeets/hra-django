@@ -7,14 +7,14 @@ class InvoiceItem(models.Model):
     quantity = models.IntegerField()
     rate = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-
     def __str__(self):
         return f"{self.product_service} - {self.invoice.invoice_number}"
-
     class Meta:
         db_table = 'invoice_item'
         verbose_name = 'Invoice Item'
         verbose_name_plural = 'Invoice Items'
+
+
 
 class Invoice(models.Model):
     invoice_id = models.AutoField(primary_key=True)
@@ -38,10 +38,8 @@ class Invoice(models.Model):
     invoice_status = models.CharField(max_length=50)
     tenant_id = models.CharField(max_length=100)
     invoice_items = models.ManyToManyField('InvoiceItem', related_name='invoices')
-
     def __str__(self):
         return f"Invoice {self.invoice_number} for {self.customer_name}"
-
     class Meta:
         db_table = 'invoice'
         verbose_name = 'Invoice'

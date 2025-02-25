@@ -20,6 +20,7 @@ import jwt
 import datetime
 from jwt import ExpiredSignatureError, InvalidTokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from hra_users.models import *
 # SECRET_KEY = "your_secret_key"
 # logger = logging.getLogger(__name__)
 
@@ -50,11 +51,10 @@ class LoginView(APIView):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-            
-            # access_token = generate_access_token(user)
-            # refresh_token = generate_refresh_token(user)
+            user_profile = UserProfile.objects.get(user=user)
+            user_role = user_profile.role.name if user_profile.role else "No Role"
 
-            return  Response({'message': 'Login successful',"status":True,"access_token":access_token,"refresh_token":str(refresh),"role":user.job_role},status=status.HTTP_200_OK)
+            return  Response({'message': 'Login successful',"status":True,"access_token":access_token,"refresh_token":str(refresh),"role":user_role},status=status.HTTP_200_OK)
             
         else:
             return Response({'error': 'Invalid credentials',"status":False}, status=status.HTTP_401_UNAUTHORIZED)

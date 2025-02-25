@@ -11,6 +11,10 @@ class Timesheet(models.Model):
     total_salary = models.DecimalField(max_digits=10, decimal_places=2)
     timesheet_status = models.CharField(max_length=50)
     attachment = models.FileField(upload_to='timesheet_attachments/', null=True, blank=True)
+    tenant_id = models.ForeignKey('hra_tenants.Tenant', on_delete=models.CASCADE,related_name='%(class)s_tenant_id',default=1)
+    status = models.CharField(max_length=20,default='1')
+    image = models.TextField(default='')
+    
 
     def __str__(self):
         return f"Timesheet {self.timesheet_id} for {self.user_name}"

@@ -38,6 +38,9 @@ CORS_ALLOW_ALL_ORIGINS = True  # For development only
 CORS_ALLOW_CREDENTIALS = True
 # Application definitions
 # CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = [
+    "https://59f5-122-160-55-143.ngrok-free.app",
+]
 INSTALLED_APPS = [
     "hra_address.apps.HraAddressConfig",
     "hra_tenants.apps.HraTenantsConfig",
@@ -81,6 +84,9 @@ SIMPLE_JWT = {
 }
 
 
+
+
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -93,6 +99,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+
+
 
 if not TESTING:
     INSTALLED_APPS = [*INSTALLED_APPS, "debug_toolbar"]
@@ -110,7 +119,11 @@ default_loaders = [
     "django.template.loaders.app_directories.Loader",
 ]
 
+
+
 cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
+
+
 
 TEMPLATES = [
     {
@@ -127,6 +140,10 @@ TEMPLATES = [
         },
     },
 ]
+
+
+
+
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -156,9 +173,13 @@ DATABASES = {
 #         "PORT": os.getenv("POSTGRES_PORT", "5432"),
 #     }
 # }
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+
+
+
+
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Password validation
