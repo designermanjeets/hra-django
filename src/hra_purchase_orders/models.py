@@ -9,7 +9,7 @@ class PurchaseOrder(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=50)
-    tenant_id = models.CharField(max_length=100)
+    tenant_id = models.ForeignKey('hra_tenants.Tenant', on_delete=models.CASCADE,related_name='%(class)s_tenant_id',default=1)
 
     def __str__(self):
         return self.po_name
@@ -21,10 +21,10 @@ class PurchaseOrder(models.Model):
 
 
 class AssignPurchaseOrder(models.Model):
-    tenant_id = models.ForeignKey('hra_tenants.Tenant', on_delete=models.CASCADE,related_name='%(class)s_tenant_id',default=1)
+    
     purchase_order_id = models.ForeignKey('PurchaseOrder', related_name='%(class)s_purchase_order_id', on_delete=models.CASCADE)
     user_id = models.ForeignKey('hra_users.User', related_name='%(class)s_user_id', on_delete=models.CASCADE)
-    status = models.CharField(max_length=50,default="1")
+    status = models.CharField(max_length=50,default="1") # 1=inprogress, 2=completed
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

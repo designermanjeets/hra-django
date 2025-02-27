@@ -94,3 +94,7 @@ class JobRoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class NotificationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notifications
+        fields = '__all__'

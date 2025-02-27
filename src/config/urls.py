@@ -26,6 +26,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
 )
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import TokenAuthentication
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -37,7 +40,11 @@ schema_view = get_schema_view(
       license=openapi.License(name="MIT License"),
    ),
    public=True,
+   permission_classes=(AllowAny,),
+
 )
+
+
 
 urlpatterns = [
     # path("up/", include("up.urls")),

@@ -36,8 +36,8 @@ class Invoice(models.Model):
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2)
     invoice_status = models.CharField(max_length=50)
-    tenant_id = models.CharField(max_length=100)
-    invoice_items = models.ManyToManyField('InvoiceItem', related_name='invoices')
+    tenant_id = models.ForeignKey('hra_tenants.Tenant', on_delete=models.CASCADE,related_name='%(class)s_tenant_id',default=1)
+    # invoice_items = models.ManyToManyField('InvoiceItem', related_name='invoices')
     def __str__(self):
         return f"Invoice {self.invoice_number} for {self.customer_name}"
     class Meta:

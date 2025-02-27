@@ -172,4 +172,13 @@ class JobRole(models.Model):
 
 
 
+class Notifications(models.Model):
+    tenant_id = models.ForeignKey('hra_tenants.Tenant', on_delete=models.CASCADE,related_name='%(class)s_tenant_id',default=1)
+    title = models.TextField()
+    messaga = models.TextField()
+    notification_type = models.CharField(max_length=20,default='1')
+    status = models.CharField(max_length=20,default='1')
+
+    class Meta:
+        db_table = "notifications"
 

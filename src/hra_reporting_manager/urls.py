@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import ReportingManagerList, ReportingManagerDetail
+from .views import *
 
 urlpatterns = [
-    path('', ReportingManagerList.as_view(), name='reporting-manager-list'),
-    path('<int:pk>/', ReportingManagerDetail.as_view(), name='reporting-manager-detail'),
+  
 ]

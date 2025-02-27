@@ -21,6 +21,7 @@ import datetime
 from jwt import ExpiredSignatureError, InvalidTokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from hra_users.models import *
+
 # SECRET_KEY = "your_secret_key"
 # logger = logging.getLogger(__name__)
 
@@ -35,6 +36,10 @@ SENDER_PASSWORD = "ruqv oyui xbkt ulok"  # Use an App Password for security
 # Refresh token expiration time in days
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
+
+
+
 
 class LoginView(APIView):
     def post(self, request):

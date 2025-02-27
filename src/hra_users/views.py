@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate, login, logout
-from .models import User
+from .models import *
 from .serializers import *
 from rest_framework.renderers import JSONRenderer
 from hra_customers.views import check_user
@@ -19,7 +19,9 @@ import time
 from django.contrib.auth.hashers import make_password
 from hra_bank_details.models import *
 from hra_bank_details.serializers import *
-
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 
 
 
@@ -219,8 +221,34 @@ class EditEmployee(APIView):
 
 
 class AllEmoloyes(APIView):
+    
     permission_classes = [IsAuthenticated, IsTenantUser]
     renderer_classes = [JSONRenderer]
+
+
+    @swagger_auto_schema(
+        operation_description="Retrieve all permissions for authenticated users with the necessary role.",
+        
+        responses={
+            200: openapi.Response(
+                "Success",
+                PermissionSerializer(many=True)
+            ),
+            403: openapi.Response(
+                "Forbidden",
+                openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        "status": openapi.Schema(type=openapi.TYPE_BOOLEAN, example=False),
+                        "message": openapi.Schema(type=openapi.TYPE_STRING, example="Have no permission.")
+                    }
+                )
+            ),
+        },
+    )
+
+
+
     def get(self, request,pk=None):
 
         auth_header = request.headers.get('Authorization', None)
@@ -309,11 +337,15 @@ class AllEmoloyes(APIView):
 
 
 
-
+@extend_schema(
+    request=UserSerializer,
+    responses={201: {"message": "Password changed successfully"}}
+)
 
 class AddEmp(APIView):
     permission_classes = [IsAuthenticated, IsTenantUser]
     renderer_classes = [JSONRenderer]
+
     def post(self,request):
 
 
@@ -671,3 +703,26 @@ class GetJobRoleApi(APIView):
             return Response({"status": True, "message": "success"}, status=status.HTTP_200_OK)
         else:
             return Response({"status": False, "message": "Failed","error":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class NotificationsAPI(APIView):
+    permission_classes = [IsAuthenticated,IsTenantUser]
+    renderer_classes = [JSONRenderer]
+    def get(self, request):
+        auth_header = request.headers.get('Authorization', None)
+        user_id = check_user(auth_header)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('view_notification'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        
+        notifications = Notifications.objects.filter(user=user_id.id)
+
+
+        serializer = NotificationsSerializer(notifications, many=True)
+        activity_logs={
+            "user":user_id.id,"name":"Get Notifications","status":"1","table":"Notifications","action":"Get Request","message":"get all Notifications"
+                       }
+        activity = store_activity(activity_logs)    
+        return Response({"status": True, "message": "success", "data": serializer.data}, status=status.HTTP_200_OK) 
