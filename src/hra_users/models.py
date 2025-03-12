@@ -64,6 +64,8 @@ class EmpDetail(models.Model):
     emp_code = models.CharField(max_length=20,unique=True,default="EMP001")
     joining_date = models.DateTimeField()
     dob = models.CharField(max_length=20)
+    hourly_rate = models.CharField(max_length=20,default='5')
+    salary_mode = models.CharField(max_length=20,default='Hourly')
     reporting_manager = models.ForeignKey("hra_users.User", on_delete=models.CASCADE,db_column='reporting_manager',related_name='%(class)s_reporting_manager')
     status = models.CharField(max_length=20,default ='1')
 

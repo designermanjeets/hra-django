@@ -11,7 +11,7 @@ from .models import Invoice
 from .serializers import InvoiceSerializer,InvoiceItemSerializer
 from hra_customers.views import check_user
 from hra_users.models import UserProfile
-
+import time
 
 
 
@@ -52,6 +52,8 @@ class AddInvoice(APIView):
         elif user_profile.role.status !='1':
             return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)   
         data['tenant_id'] = request.user.tenant_id.id
+        data["order_number"] = int(time.time())
+        data["invoice_number"] = int(time.time())
         serializer = InvoiceSerializer(data=data)
         if serializer.is_valid():
             invoice_id = serializer.save(tenant_id=request.user.tenant_id)

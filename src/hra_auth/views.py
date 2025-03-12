@@ -43,6 +43,7 @@ User = get_user_model()
 
 class LoginView(APIView):
     def post(self, request):
+        print("Login API")
         try:
             username = request.data['username']
             password = request.data['password']
@@ -52,15 +53,12 @@ class LoginView(APIView):
         print(username,password)
         user = authenticate(username=username, password=password)
         # logger.info()
-        
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
             user_profile = UserProfile.objects.get(user=user)
             user_role = user_profile.role.name if user_profile.role else "No Role"
-
             return  Response({'message': 'Login successful',"status":True,"access_token":access_token,"refresh_token":str(refresh),"role":user_role},status=status.HTTP_200_OK)
-            
         else:
             return Response({'error': 'Invalid credentials',"status":False}, status=status.HTTP_401_UNAUTHORIZED)
 

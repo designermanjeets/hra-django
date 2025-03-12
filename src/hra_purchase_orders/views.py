@@ -28,8 +28,25 @@ class PurchaseOrderList(APIView):
         
         serializer = PurchaseOrderSerializer(purchase_orders, many=True)
         return Response({"status":True,"data":serializer.data,"message":"Purchase Order List"}, status=status.HTTP_200_OK)
-
     
+
+class PurchaseOrderListByCustomer(APIView):
+    permission_classes = [IsAuthenticated, IsTenantUser]
+    renderer_classes = [JSONRenderer]
+    def get(self, request,pk=None):
+        auth_header = request.headers.get('Authorization', None)
+        user_id = check_user(auth_header)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('view_purchaseorder'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)    
+        purchase_orders = PurchaseOrder.objects.filter(customer_name=pk,tenant_id=request.user.tenant_id)
+        serializer = PurchaseOrderSerializer(purchase_orders, many=True)
+        return Response({"status":True,"data":serializer.data,"message":"Purchase Order List"}, status=status.HTTP_200_OK)
+
+
+
 
 class AddPurchaseOrder(APIView):
     permission_classes = [IsAuthenticated, IsTenantUser]
@@ -42,7 +59,7 @@ class AddPurchaseOrder(APIView):
             return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
         elif user_profile.role.status !='1':
             return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)    
-  
+        request.data['tenant_id'] = request.user.tenant_id.id   
         serializer = PurchaseOrderSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(tenant_id=request.user.tenant_id)
@@ -91,7 +108,21 @@ class AssignPurchaseOrderList(APIView):
         serializer = AssignPurchaseOrderSerializer(assign_purchase_orders, many=True)
         return Response({"status":True,"message":"Assign Purchase order list","data":serializer.data},status=status.HTTP_200_OK)
 
-
+class Employeesassignorder(APIView):
+    permission_classes = [IsAuthenticated, IsTenantUser]
+    renderer_classes = [JSONRenderer]
+    def get(self, request,pk=None):
+        auth_header = request.headers.get('Authorization', None)
+        user_id = check_user(auth_header)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        if not user_profile.has_permission('view_assignpurchaseorder'):
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
+        elif user_profile.role.status !='1':
+            return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)    
+        purchase_orders = AssignPurchaseOrder.objects.filter(user_id=user_id.id)
+    
+        serializer = AssignPurchaseOrderSerializer(purchase_orders, many=True)
+        return Response({"status":True,"data":serializer.data,"message":"Employee assign Order List"}, status=status.HTTP_200_OK)
 
     
 
@@ -111,16 +142,17 @@ class AddAssignPurchaseOrder(APIView):
         auth_header = request.headers.get('Authorization', None)
         user_id = check_user(auth_header)
         user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        print(request.data.get('user_id'))
         if not user_profile.has_permission('add_assignpurchaseorder'):
             return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)
         elif user_profile.role.status !='1':
             return Response({"status": False, "message": "Have no permission."}, status=status.HTTP_403_FORBIDDEN)    
-        check = AssignPurchaseOrder.objects.filter(user_id=request.data.get('user_id'),status='1')
+        check = AssignPurchaseOrder.objects.filter(user_id=request.data.get("user_id"),status='1')
         if check:
             return Response({"status": False, "message": "Already assigned."}, status=status.HTTP_403_FORBIDDEN)
         serializer = AssignPurchaseOrderSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user_id=request.user)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({"data":serializer.errors,"status":True,"message":"Assign successfully"}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -38,9 +38,16 @@ CORS_ALLOW_ALL_ORIGINS = True  # For development only
 CORS_ALLOW_CREDENTIALS = True
 # Application definitions
 # CORS_ALLOWED_ORIGINS = ["*"]
+
+
+
 CORS_ALLOWED_ORIGINS = [
     "https://59f5-122-160-55-143.ngrok-free.app",
 ]
+
+
+
+
 INSTALLED_APPS = [
     "hra_address.apps.HraAddressConfig",
     "hra_tenants.apps.HraTenantsConfig",
@@ -63,22 +70,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    # "rest_framework_simplejwt",
+    "rest_framework_simplejwt",
     "drf_yasg",
     "corsheaders",
-    "hra_auth"
+    "hra_auth",
 ]
+
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),   
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  # Enforce authentication
-    ),
-       'DEFAULT_PARSER_CLASSES': (
-        'rest_framework.parsers.JSONParser',  # Ensure JSON parsing
-    ),
+    )
 }
 
 
